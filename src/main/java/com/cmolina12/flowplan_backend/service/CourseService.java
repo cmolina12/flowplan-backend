@@ -51,6 +51,13 @@ public class CourseService {
         return restTemplate.getForObject(url, ApiCourse[].class);
     }
 
+    /**
+     * Converts raw course sections fetched from the API into a list of Course objects, each containing its sections.
+     * 
+     * @param nameInput the name input to filter course sections.
+     * @return a list of Course objects representing the courses and their sections.
+     */
+
     public List<Course> getDomainCourses(String nameInput){
 
         ApiCourse[] raw = fetchRawSections(nameInput); // Fetches raw course sections from the API based on the provided name input.
@@ -115,6 +122,7 @@ public class CourseService {
      * @param hhmm the time string in "hhmm" format.
      * @return a LocalTime object representing the parsed time.
      */
+
     private LocalTime parseTime(String hhmm){
         int hour = Integer.parseInt(hhmm.substring(0, 2)); // Extracts the hour part from the hhmm string.
         int minute = Integer.parseInt(hhmm.substring(2, 4)); // Extracts the minute part from the hhmm string.
@@ -131,12 +139,18 @@ public class CourseService {
     private List<DayOfWeek> parseDays(Schedule s){
         List<DayOfWeek> days = new ArrayList<>(); // Initializes an empty list to hold the days of the week.
 
-        if ("L".equalsIgnoreCase(s.getL())) days.add(DayOfWeek.MONDAY);
-        if ("M".equalsIgnoreCase(s.getM())) days.add(DayOfWeek.TUESDAY);
-        if ("I".equalsIgnoreCase(s.getI())) days.add(DayOfWeek.WEDNESDAY);
-        if ("J".equalsIgnoreCase(s.getJ())) days.add(DayOfWeek.THURSDAY);
-        if ("V".equalsIgnoreCase(s.getV())) days.add(DayOfWeek.FRIDAY);
-        if ("S".equalsIgnoreCase(s.getS())) days.add(DayOfWeek.SATURDAY);
+        if ("L".equalsIgnoreCase(s.getL())) 
+            days.add(DayOfWeek.MONDAY);
+        if ("M".equalsIgnoreCase(s.getM())) 
+            days.add(DayOfWeek.TUESDAY);
+        if ("I".equalsIgnoreCase(s.getI())) 
+            days.add(DayOfWeek.WEDNESDAY);
+        if ("J".equalsIgnoreCase(s.getJ())) 
+            days.add(DayOfWeek.THURSDAY);
+        if ("V".equalsIgnoreCase(s.getV())) 
+            days.add(DayOfWeek.FRIDAY);
+        if ("S".equalsIgnoreCase(s.getS())) 
+            days.add(DayOfWeek.SATURDAY);
         
         return days; // Returns the list of days of the week.
 
