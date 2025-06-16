@@ -1,5 +1,6 @@
 package com.cmolina12.flowplan_backend.service;
 import com.cmolina12.flowplan_backend.models.ApiCourse;
+import com.cmolina12.flowplan_backend.models.Instructor;
 import com.cmolina12.flowplan_backend.models.Schedule;
 
 import org.springframework.web.client.RestTemplate;
@@ -9,6 +10,12 @@ import java.time.LocalTime;
 import java.util.List;
 import java.util.ArrayList;
 import java.time.DayOfWeek;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import com.cmolina12.flowplan_backend.domain.Course;
+import com.cmolina12.flowplan_backend.domain.Meeting;
+import com.cmolina12.flowplan_backend.domain.Section;
 
 @Service
 public class CourseService {
@@ -44,6 +51,64 @@ public class CourseService {
         return restTemplate.getForObject(url, ApiCourse[].class);
     }
 
+    public List<Course> getDomainCourses(String nameInput){
+
+        ApiCourse[] raw = fetchRawSections(nameInput); // Fetches raw course sections from the API based on the provided name input.
+
+        // Temporal map
+        Map<String, Course> courseMap = new LinkedHashMap<>(); // Initializes a map to hold courses by their code.
+
+        for (ApiCourse a : raw){
+
+            String code = a.getClazz() + a.getCourse();
+
+            // Construct the course
+
+            Course course = courseMap.computeIfAbsent(code, c -> new Course(c, a.getTitle())); // If the course does not exist in the map, create a new Course object with the course code and title.
+           
+            // Fill in the sections
+
+            List<Meeting> meetings = new ArrayList<>(); // Initializes a list to hold meetings for the course section.
+
+            for (Schedule s : a.getSchedules()) {
+                for (DayOfWeek day : parseDays(s)) {
+                    LocalTime start = parseTime(s.getTime_ini());
+                    LocalTime end   = parseTime(s.getTime_fin());
+                    String location = s.getBuilding() + " " + s.getClassroom();
+                    meetings.add(new Meeting(day, start, end, location));
+                }
+            }
+
+            // Professors
+
+           List<String> profs = new ArrayList<>();
+
+            for (Instructor ins : a.getInstructors()) {
+                profs.add(ins.getName());
+            }
+
+            // Create a section with the course code, section number, meetings, and professors.
+
+            Section sec = new Section(
+                a.getNrc(), // NRC (Número de Registro de Clase) is used as a unique identifier for the section.
+                a.getSection(), // Section ID, e.g., "1", "A", "B".
+                a.getTerm(), // Term, e.g., "202519".
+                a.getPtrm(), // PTRM (Periodo de Tiempo), e.g., "1" or "8A".
+                a.getCampus(), // Campus, e.g., "CAMPUS PRINCIPAL".
+                meetings, // List of Meeting objects representing the schedule for the section.
+                profs // List of professors teaching the section.
+            );
+
+            // Associate the section with the course.
+            course.addSection(sec); // Adds the section to the course's list of sections.
+
+
+        }
+
+        // Return the list of courses.
+        return new ArrayList<>(courseMap.values());
+    }
+
     /**
      * Parses a time string in the format "hhmm" and returns a LocalTime object.
      * 
@@ -55,6 +120,13 @@ public class CourseService {
         int minute = Integer.parseInt(hhmm.substring(2, 4)); // Extracts the minute part from the hhmm string.
         return LocalTime.of(hour, minute); // Returns a LocalTime object representing the time.
     }
+
+    /**
+     * Parses a Schedule object and returns a list of DayOfWeek objects representing the days of the week.
+     * 
+     * @param s the Schedule object to parse.
+     * @return a list of DayOfWeek objects representing the days of the week.
+     */
 
     private List<DayOfWeek> parseDays(Schedule s){
         List<DayOfWeek> days = new ArrayList<>(); // Initializes an empty list to hold the days of the week.

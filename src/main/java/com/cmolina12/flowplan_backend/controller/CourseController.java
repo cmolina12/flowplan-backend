@@ -7,6 +7,8 @@ import com.cmolina12.flowplan_backend.models.ApiCourse; // Importing the ApiCour
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import com.cmolina12.flowplan_backend.domain.Course; // Importing the Course domain model to represent the course data in a structured way.
+import java.util.List; // Importing List to handle collections of courses.
 
 
 @RestController // This annotation indicates that this class is a REST controller, which means it will handle HTTP requests and return responses in a RESTful manner.
@@ -29,6 +31,17 @@ public class CourseController {
     ) {
         ApiCourse[] courses = courseService.fetchRawSections(nameInput);
         if (courses == null || courses.length == 0) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
+
+    @GetMapping("/domain")
+    public ResponseEntity<List<Course>> getDomainCourses(
+        @RequestParam("nameInput") String nameInput
+    ) {
+        List<Course> courses = courseService.getDomainCourses(nameInput);
+        if (courses.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(courses);
