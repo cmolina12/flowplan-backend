@@ -1,13 +1,13 @@
 package com.cmolina12.flowplan_backend.service;
 import com.cmolina12.flowplan_backend.domain.Section;
-import java.util.List;
-
-import org.springframework.web.servlet.FlashMapManager;
-
-import java.util.ArrayList;
-
 import com.cmolina12.flowplan_backend.domain.Meeting;
+import java.util.List;
+import java.util.ArrayList;
+import org.springframework.stereotype.Service;
 
+
+
+@Service
 public class ScheduleService {
 
     // All schedule generation
