@@ -166,7 +166,6 @@ public class CourseService {
 
     public List<Section> findSectionsByCourseCode(String code){
 
-
         List<Course> courses = getDomainCourses(code); // Fetches the list of courses based on the provided course code.
         
         if (courses.isEmpty()) {

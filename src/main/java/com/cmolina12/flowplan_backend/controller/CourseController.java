@@ -65,6 +65,13 @@ public class CourseController {
         return ResponseEntity.ok(courses);
     }
 
+    /**
+     * Fetches sections of a course based on the provided course code.
+     * 
+     * @param code the course code to filter sections.
+     * @return a ResponseEntity containing a list of Section objects representing the sections of the course.
+     */
+
     @GetMapping("/{code}/sections")
     public ResponseEntity<List<Section>> getSectionsByCode(@PathVariable("code") String code) {
   
