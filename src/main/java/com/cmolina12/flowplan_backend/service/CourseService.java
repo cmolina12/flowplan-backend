@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.time.DayOfWeek;
 import java.util.Map;
-import java.util.stream.Collectors;
 import java.util.LinkedHashMap;
 import com.cmolina12.flowplan_backend.domain.Course;
 import com.cmolina12.flowplan_backend.domain.Meeting;
