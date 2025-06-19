@@ -157,5 +157,27 @@ public class CourseService {
 
     }
 
+    /**
+     * Finds sections by course code.
+     * 
+     * @param code the course code to search for.
+     * @return a list of Section objects associated with the course code.
+     */
+
+    public List<Section> findSectionsByCourseCode(String code){
+
+
+        List<Course> courses = getDomainCourses(code); // Fetches the list of courses based on the provided course code.
+        
+        if (courses.isEmpty()) {
+            return new ArrayList<>(); // If no courses are found, return an empty list.
+        }
+
+        // We want to return sections from the first course found with the given code. (The only one that should exist, actually)
+        Course course = courses.get(0); // Gets the first course from the list.
+
+        return course.getSections(); // Returns the list of sections associated with the course.
+
+    }
 
 }
