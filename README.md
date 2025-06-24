@@ -1,6 +1,10 @@
-Flowplan Backend is a Spring Boot service that exposes a small REST API to retrieve course information from the Uniandes public course catalog and generate schedule combinations. It acts as the backend component for the Flowplan project.
+# Flowplan Backend
 
-## Features
+This is the backend service for **Flowplan**, a web application designed to help students at Uniandes build optimal class schedules.
+
+The backend is built with Spring Boot and is responsible for retrieving course data from the Uniandes public catalog, processing it, and exposing a REST API that the frontend consumes.
+
+## Current Features
 
 - Fetch raw course data from the Uniandes API.
 - Convert the raw data into domain objects (`Course`, `Section`, `Meeting`).
