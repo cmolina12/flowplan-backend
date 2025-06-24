@@ -3,6 +3,8 @@ package com.cmolina12.flowplan_backend.controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.cmolina12.flowplan_backend.service.ScheduleService; // Importing the ScheduleService to use its methods for generating schedules based on course sections.
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import com.cmolina12.flowplan_backend.domain.Section; // Importing the Section domain model to represent course sections in the schedule.
@@ -15,17 +17,8 @@ import java.util.List; // Importing List to handle collections of sections in th
 public class ScheduleController {
 
     // This controller handles requests related to schedule generation based on course sections.
-    private final ScheduleService scheduleService; // scheduleService is an instance of ScheduleService, which is used to generate schedules based on course sections.
-    
-    /**
-     * Constructor for ScheduleController.
-     * 
-     * @param scheduleService the ScheduleService instance used to generate schedules.
-     */
-
-    public ScheduleController(ScheduleService scheduleService) {
-        this.scheduleService = scheduleService; // The ScheduleService instance is injected into the controller, allowing it to use the service methods to generate schedules.
-    }
+    @Autowired
+    private ScheduleService scheduleService; // scheduleService is an instance of ScheduleService, which is used to generate schedules based on course sections.
 
     /**
      * Generates all possible schedules based on the provided list of lists of Section objects.

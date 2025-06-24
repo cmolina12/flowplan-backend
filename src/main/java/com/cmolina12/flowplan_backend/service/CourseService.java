@@ -4,6 +4,7 @@ import com.cmolina12.flowplan_backend.models.Instructor;
 import com.cmolina12.flowplan_backend.models.Schedule;
 
 import org.springframework.web.client.RestTemplate;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.time.LocalTime;
@@ -19,20 +20,11 @@ import com.cmolina12.flowplan_backend.domain.Section;
 @Service
 public class CourseService {
     
-    private final RestTemplate restTemplate; // RestTemplate is used to make HTTP requests to the API to fetch course data.
-    private final String apiBaseUrl; // apiBaseUrl is the base URL of the API that provides course information, which is used to construct the full URL for API requests.
-
-    /**
-     * Constructor for CourseService.
-     * 
-     * @param restTemplate the RestTemplate instance used to make HTTP requests.
-     * @param apiBaseUrl the base URL of the API, injected from application properties.
-     */
-
-    public CourseService(RestTemplate restTemplate, @Value("${uniandes.api.base-url}") String apiBaseUrl) {
-        this.restTemplate = restTemplate; // RestTemplate is injected to allow making HTTP requests to the API.
-        this.apiBaseUrl = apiBaseUrl; // The base URL is injected from the application properties, allowing flexibility in configuration.
-    }
+    @Autowired
+    private RestTemplate restTemplate; // RestTemplate is used to make HTTP requests to the API to fetch course data.
+   
+    @Autowired
+    private String apiBaseUrl; // apiBaseUrl is the base URL of the API that provides course information, which is used to construct the full URL for API requests.
 
     /**
      * Fetches raw course sections from the API based on the provided name input. This actually works the same way as if you were to use the search bar in the website.
