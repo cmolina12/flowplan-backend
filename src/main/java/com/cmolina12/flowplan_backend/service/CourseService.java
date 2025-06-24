@@ -23,9 +23,9 @@ public class CourseService {
     @Autowired
     private RestTemplate restTemplate; // RestTemplate is used to make HTTP requests to the API to fetch course data.
    
-    @Autowired
-    private String apiBaseUrl; // apiBaseUrl is the base URL of the API that provides course information, which is used to construct the full URL for API requests.
-
+    @Value("${uniandes.api.base-url}")
+    private String apiBaseUrl;
+    
     /**
      * Fetches raw course sections from the API based on the provided name input. This actually works the same way as if you were to use the search bar in the website.
      * 
