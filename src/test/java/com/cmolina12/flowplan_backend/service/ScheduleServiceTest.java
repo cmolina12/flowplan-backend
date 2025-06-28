@@ -59,7 +59,7 @@ class ScheduleServiceTest {
             List.of("PROF. C")
         );
 
-        List<List<Section>> candidates = List.of(List.of(a1), List.of(b1)); // Create a list of lists of Section objects, where each inner list represents a candidate section for the schedule.
+        List<List<Section>> candidates = List.of(List.of(a1), List.of(b1)); // Create a list of lists of Section objects, where each inner list represents a candidate section for a specific course for the schedule.
 
         ScheduleService scheduleService = new ScheduleService(); // Create an instance of ScheduleService to use its methods for generating schedules based on course sections.
 
