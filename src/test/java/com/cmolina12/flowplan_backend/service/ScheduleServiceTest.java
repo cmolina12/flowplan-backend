@@ -10,11 +10,33 @@ import java.time.LocalTime;
 
 class ScheduleServiceTest {
     
+    private Section makeFullSection (
+        String nrc, 
+        String sectionId,
+        String term, 
+        String ptrm,
+        String campus, 
+        DayOfWeek day, 
+        String start, 
+        String end, 
+        String location, 
+        List<String> professors
+    )
     
-    private Section makeFullSection (String nrc, String sectionId, String term, String ptrm, String campus, DayOfWeek day, String start, String end, String location, List<String> professors)
     {
-        Meeting meeting = new Meeting(day, LocalTime.parse(start), LocalTime.parse(end), location); // Create a Meeting object with the specified day, start time, end time, and location. This method assumes there's only one meeting per section for simplicity.
-        return new Section(nrc, sectionId, term, ptrm, campus, List.of(meeting), professors); // Create a Section object with the provided parameters, including the list of meetings and professors.
+        Meeting meeting = new Meeting(
+            day, 
+            LocalTime.parse(start), 
+            LocalTime.parse(end), 
+            location); // Create a Meeting object with the specified day, start time, end time, and location. This method assumes there's only one meeting per section for simplicity.
+        return new Section(
+            nrc, 
+            sectionId, 
+            term, 
+            ptrm, 
+            campus,
+            List.of(meeting), 
+            professors); // Create a Section object with the provided parameters, including the list of meetings and professors.
     }
 
     @Test
