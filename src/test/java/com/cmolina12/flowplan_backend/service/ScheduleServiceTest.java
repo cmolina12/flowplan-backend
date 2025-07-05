@@ -127,11 +127,14 @@ class ScheduleServiceTest {
             DayOfWeek.MONDAY, "10:00", "11:00", ".A_102",
             List.of("PROF. B")
         );
+        
    
         List<List<Section>> candidates = List.of(List.of(s1,s2)); // Create a list of lists of Section objects, where each inner list represents the candidate sections for a certain course. In this case, we have two sections (s1 and s2) for the same course, which do not overlap in time.
     
         ScheduleService scheduleService = new ScheduleService(); // Create an instance of ScheduleService to use its methods for generating schedules based on course sections.
 
+        scheduleService.verifyCorrectParameters(candidates); // Call the verifyCorrectParameters method of ScheduleService to ensure that the candidates list is valid and meets the requirements for scheduling.
+        
         List<List<Section>> schedules = scheduleService.generateAllSchedules(candidates); // Call the generateAllSchedules method of ScheduleService with the candidates list to get all possible schedules.
 
         // Assert that the size of the schedules list is 2, indicating that two non-overlapping sections were successfully scheduled. (2 because we have two sections for one course, so there are two possible schedules: one with section 1 and another with section 2)
@@ -159,6 +162,8 @@ class ScheduleServiceTest {
         List<List<Section>> candidates = List.of(List.of(a1), List.of(b1)); // Create a list of lists of Section objects, where each inner list represents a candidate section for a specific course for the schedule.
 
         ScheduleService scheduleService = new ScheduleService(); // Create an instance of ScheduleService to use its methods for generating schedules based on course sections.
+
+        scheduleService.verifyCorrectParameters(candidates); // Call the verifyCorrectParameters method of ScheduleService to ensure that the candidates list is valid and meets the requirements for scheduling.
 
         List<List<Section>> schedules = scheduleService.generateAllSchedules(candidates); // Call the generateAllSchedules method of ScheduleService with the candidates list to get all possible schedules.
 
@@ -198,6 +203,9 @@ class ScheduleServiceTest {
         List<List<Section>> candidates = List.of(List.of(course1), List.of(course2), List.of(course3), List.of(course4));
 
         ScheduleService scheduleService = new ScheduleService();
+
+        scheduleService.verifyCorrectParameters(candidates); // Call the verifyCorrectParameters method of ScheduleService to ensure that the candidates list is valid and meets the requirements for scheduling.
+        
         List<List<Section>> schedules = scheduleService.generateAllSchedules(candidates);
 
         assert schedules.size() == 1 : "Expected 1 valid schedule, but got " + schedules.size(); // One valid schedule because all courses have non-overlapping sections.
