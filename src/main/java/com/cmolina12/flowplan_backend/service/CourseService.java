@@ -115,6 +115,9 @@ public class CourseService {
      */
 
     private LocalTime parseTime(String hhmm){
+        if (hhmm == null || hhmm.length() < 4) {
+            throw new IllegalArgumentException("Invalid time format: " + hhmm);
+        }
         int hour = Integer.parseInt(hhmm.substring(0, 2)); // Extracts the hour part from the hhmm string.
         int minute = Integer.parseInt(hhmm.substring(2, 4)); // Extracts the minute part from the hhmm string.
         return LocalTime.of(hour, minute); // Returns a LocalTime object representing the time.
