@@ -82,7 +82,7 @@ public class CourseService {
            List<String> profs = new ArrayList<>();
 
             for (Instructor ins : a.getInstructors()) {
-                profs.add(ins.getName());
+                profs.add(reorderProfessorName(ins.getName())); // Adds the reordered professor's name
             }
 
             // Create a section with the course code, section number, meetings, and professors.
@@ -116,7 +116,7 @@ public class CourseService {
 
     private LocalTime parseTime(String hhmm){
         if (hhmm == null || hhmm.length() < 4) {
-            throw new IllegalArgumentException("Invalid time format: " + hhmm);
+            throw new IllegalArgumentException("Invalid time format when trying to parse: " + hhmm);
         }
         int hour = Integer.parseInt(hhmm.substring(0, 2)); // Extracts the hour part from the hhmm string.
         int minute = Integer.parseInt(hhmm.substring(2, 4)); // Extracts the minute part from the hhmm string.
@@ -170,6 +170,25 @@ public class CourseService {
         Course course = courses.get(0); // Gets the first course from the list.
 
         return course.getSections(); // Returns the list of sections associated with the course.
+
+    }
+
+    private String reorderProfessorName(String name){
+
+        if (name == null || name.trim().isEmpty()) return name; // If the name is null or empty, return it as is.
+
+        String[] parts = name.trim().split("\\s+"); // Splits the name into parts based on whitespace.
+        int len = parts.length;
+
+        if (len == 2){
+            return parts[1] + " " + parts[0]; // Original would be "LastName FirstName", we reorder it to "FirstName LastName".
+        } else if (len == 3){
+            return parts[3] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName", we reorder it to "FirstName LastName SecondLastName".
+        } else if (len == 4){
+            return parts[3] + " " + parts[4] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName SecondName", we reorder it to "FirstName LastName SecondLastName ThirdLastName".
+        } else {
+            return name; // If the name has more than 4 parts, we return it as is.
+        }
 
     }
 
