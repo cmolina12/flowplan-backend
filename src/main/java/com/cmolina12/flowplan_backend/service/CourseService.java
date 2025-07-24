@@ -173,6 +173,13 @@ public class CourseService {
 
     }
 
+    
+    /**
+     * Reorders the professor's name based on the number of parts in the name.
+     * @param name the professor's name to reorder.
+     * @return the reordered name
+     */
+    
     private String reorderProfessorName(String name){
 
         if (name == null || name.trim().isEmpty()) return name; // If the name is null or empty, return it as is.
