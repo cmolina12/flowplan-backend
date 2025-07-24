@@ -185,7 +185,7 @@ public class CourseService {
         } else if (len == 3){
             return parts[2] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName", we reorder it to "FirstName LastName SecondLastName".
         } else if (len == 4){
-            return parts[3] + " " + parts[2] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName SecondName", we reorder it to "FirstName LastName SecondLastName ThirdLastName".
+            return parts[2] + " " + parts[3] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName SecondName", we reorder it to "FirstName LastName SecondLastName ThirdLastName".
         } else {
             return name; // If the name has more than 4 parts, we return it as is.
         }
