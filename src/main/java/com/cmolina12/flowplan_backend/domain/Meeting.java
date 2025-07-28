@@ -2,12 +2,13 @@ package com.cmolina12.flowplan_backend.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import lombok.Getter;
 
 public class Meeting {
-    private final DayOfWeek day;     // LUNES, MARTES, ...
-    private final LocalTime start;   // hora de inicio
-    private final LocalTime end;     // hora de fin
-    private final String location;   // edificio + aula
+    @Getter private final DayOfWeek day;     // LUNES, MARTES, ...
+    @Getter private final LocalTime start;   // hora de inicio
+    @Getter private final LocalTime end;     // hora de fin
+    @Getter private final String location;   // edificio + aula
 
     public Meeting(DayOfWeek day,
                    LocalTime start,
@@ -19,19 +20,4 @@ public class Meeting {
         this.location = location;
     }
 
-    public DayOfWeek getDay() {
-        return day;
-    }
-
-    public LocalTime getStart() {
-        return start;
-    }
-
-    public LocalTime getEnd() {
-        return end;
-    }
-
-    public String getLocation() {
-        return location;
-    }
 }

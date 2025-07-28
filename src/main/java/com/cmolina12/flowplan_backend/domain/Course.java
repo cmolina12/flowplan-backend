@@ -2,26 +2,16 @@ package com.cmolina12.flowplan_backend.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
+
 public class Course {
-    private final String code; // The course code, e.g., "CS101"
-    private final String title; // The course name, e.g., "Introduction to Computer Science"
-    private final List<Section> sections = new ArrayList<>(); // A list of sections for this course
+    @Getter private final String code; // The course code, e.g., "CS101"
+    @Getter private final String title; // The course name, e.g., "Introduction to Computer Science"
+    @Getter private final List<Section> sections = new ArrayList<>(); // A list of sections for this course
 
     public Course(String code, String title) {
         this.code = code;
         this.title = title;
-    }
-
-    public String getCode() {
-        return code;
-    }
-    
-    public String getTitle() {
-        return title;
-    }
-
-    public List<Section> getSections() {
-        return sections;
     }
 
     public void addSection(Section section) {

@@ -1,12 +1,8 @@
 package com.cmolina12.flowplan_backend.models;
+import lombok.Getter;
+import lombok.Setter;
 
 public class Attr {
-    private String code;
+    @Getter @Setter private String code;
 
-    public String getCode() {
-        return code;
-    }
-    public void setCode(String code) {
-        this.code = code;
-    }
 }
