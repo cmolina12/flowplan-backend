@@ -1,10 +1,9 @@
-package com.cmolina12.flowplan_backend.service;
+package com.cmolina12.senehorario_backend.service;
 
 import org.junit.jupiter.api.Test;
 
 import com.cmolina12.senehorario_backend.domain.Meeting;
 import com.cmolina12.senehorario_backend.domain.Section;
-import com.cmolina12.senehorario_backend.service.ScheduleService;
 
 import java.time.DayOfWeek;
 import java.util.List;
