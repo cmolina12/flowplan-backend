@@ -1,6 +1,6 @@
-# Flowplan Backend
+# Senéhorario Backend
 
-This is the backend service for **Flowplan**, a web application designed to help students at Uniandes build optimal class schedules.
+This is the backend service for **Senéhorario**, a web application designed to help students at Uniandes build optimal class schedules.
 
 The backend is built with Spring Boot and is responsible for retrieving course data from the Uniandes public catalog, processing it, and exposing a REST API that the frontend consumes.
 
@@ -28,7 +28,7 @@ To build the project and run the application locally:
 ./mvnw spring-boot:run
 ```
 
-The application starts `FlowplanBackendApplication` which excludes automatic database configuration and simply launches the REST endpoints.
+The application starts `SenehorarioBackendApplication` which excludes automatic database configuration and simply launches the REST endpoints.
 
 ## License
 
