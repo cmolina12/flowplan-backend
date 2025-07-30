@@ -1,9 +1,10 @@
-package com.cmolina12.flowplan_backend.service;
-import com.cmolina12.flowplan_backend.domain.Section;
-import com.cmolina12.flowplan_backend.domain.Meeting;
+package com.cmolina12.senehorario_backend.service;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.stereotype.Service;
+
+import com.cmolina12.senehorario_backend.domain.Meeting;
+import com.cmolina12.senehorario_backend.domain.Section;
 
 
 

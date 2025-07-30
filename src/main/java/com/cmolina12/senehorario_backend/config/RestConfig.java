@@ -1,4 +1,4 @@
-package com.cmolina12.flowplan_backend.config;
+package com.cmolina12.senehorario_backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

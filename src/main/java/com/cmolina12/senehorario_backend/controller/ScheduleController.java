@@ -1,15 +1,17 @@
-package com.cmolina12.flowplan_backend.controller;
+package com.cmolina12.senehorario_backend.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cmolina12.flowplan_backend.service.ScheduleService; // Importing the ScheduleService to use its methods for generating schedules based on course sections.
+
+import com.cmolina12.senehorario_backend.domain.Section;
+import com.cmolina12.senehorario_backend.service.ScheduleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import com.cmolina12.flowplan_backend.domain.Section; // Importing the Section domain model to represent course sections in the schedule.
+
 import java.util.List; // Importing List to handle collections of sections in the schedule.
 import java.util.ArrayList; // Importing ArrayList to initialize an empty list of schedules if no schedules are generated.
 

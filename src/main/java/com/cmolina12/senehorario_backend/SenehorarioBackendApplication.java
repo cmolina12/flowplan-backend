@@ -1,4 +1,4 @@
-package com.cmolina12.flowplan_backend;
+package com.cmolina12.senehorario_backend;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,10 +8,10 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
-public class FlowplanBackendApplication {
+public class SenehorarioBackendApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(FlowplanBackendApplication.class, args);
+        SpringApplication.run(SenehorarioBackendApplication.class, args);
     }
 
     // CORS configuration to allow Angular frontend during development

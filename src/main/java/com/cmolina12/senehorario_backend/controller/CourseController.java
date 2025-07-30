@@ -1,17 +1,19 @@
-package com.cmolina12.flowplan_backend.controller;
+package com.cmolina12.senehorario_backend.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import com.cmolina12.flowplan_backend.service.CourseService; // Importing the CourseService to use its methods for fetching course data from the API.
-import com.cmolina12.flowplan_backend.models.ApiCourse; // Importing the ApiCourse model to represent the course data returned by the API.
+
+import com.cmolina12.senehorario_backend.domain.Course;
+import com.cmolina12.senehorario_backend.domain.Section;
+import com.cmolina12.senehorario_backend.models.ApiCourse;
+import com.cmolina12.senehorario_backend.service.CourseService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
-import com.cmolina12.flowplan_backend.domain.Course; // Importing the Course domain model to represent the course data in a structured way.
-import com.cmolina12.flowplan_backend.domain.Section; // Importing the Section domain model to represent sections of a course.
+
 import java.util.List; // Importing List to handle collections of courses.
 
 

@@ -1,4 +1,4 @@
-package com.cmolina12.flowplan_backend.models;
+package com.cmolina12.senehorario_backend.models;
 import lombok.Getter;
 import lombok.Setter;
 

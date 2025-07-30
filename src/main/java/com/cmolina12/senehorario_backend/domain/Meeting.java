@@ -1,4 +1,4 @@
-package com.cmolina12.flowplan_backend.domain;
+package com.cmolina12.senehorario_backend.domain;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;

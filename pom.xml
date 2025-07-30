@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.cmolina12</groupId>
-	<artifactId>flowplan-backend</artifactId>
+	<artifactId>senehorario-backend</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>flowplan-backend</name>
-	<description>Backend repository for Flowplan project</description>
+	<name>senehorario-backend</name>
+	<description>Backend repository for Senehorario project</description>
 	<url/>
 	<licenses>
 		<license/>

@@ -1,9 +1,13 @@
-package com.cmolina12.flowplan_backend.service;
-import com.cmolina12.flowplan_backend.models.ApiCourse;
-import com.cmolina12.flowplan_backend.models.Instructor;
-import com.cmolina12.flowplan_backend.models.Schedule;
-
+package com.cmolina12.senehorario_backend.service;
 import org.springframework.web.client.RestTemplate;
+
+import com.cmolina12.senehorario_backend.domain.Course;
+import com.cmolina12.senehorario_backend.domain.Meeting;
+import com.cmolina12.senehorario_backend.domain.Section;
+import com.cmolina12.senehorario_backend.models.ApiCourse;
+import com.cmolina12.senehorario_backend.models.Instructor;
+import com.cmolina12.senehorario_backend.models.Schedule;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -13,9 +17,6 @@ import java.util.ArrayList;
 import java.time.DayOfWeek;
 import java.util.Map;
 import java.util.LinkedHashMap;
-import com.cmolina12.flowplan_backend.domain.Course;
-import com.cmolina12.flowplan_backend.domain.Meeting;
-import com.cmolina12.flowplan_backend.domain.Section;
 
 @Service
 public class CourseService {
