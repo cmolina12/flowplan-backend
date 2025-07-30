@@ -1,4 +1,4 @@
-package com.cmolina12.flowplan_backend;
+package com.cmolina12.senehorario_backend;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
