@@ -35,18 +35,14 @@ public class CourseService {
      * @return an array of ApiCourse objects representing the course sections.
      */
 
-    public ApiCourse[] fetchRawSections(String nameInput) {
+    public ApiCourse[] fetchRawSections(String nameInput, String profesorName) {
         String url =
             apiBaseUrl +
-            "?term=&ptrm=&prefix=&attr=&nameInput=" + // The URL is constructed to include the base URL, and query
-            // parameters for term, ptrm, prefix, attr, and nameInput.
-            nameInput.toUpperCase(); // The URL is constructed to include the base URL, and query parameters for
-        // term, ptrm, prefix, attr, and nameInput INITIALLY. The nameInput is
-        // converted to uppercase to match the expected format in the API. Additional
-        // query parameters can be added after the nameInput if needed.
+            "?term=&ptrm=&prefix=&attr=&nameInput=" +
+            nameInput.toUpperCase() +
+            "&campus=&attrs=&timeStart=&offset=0&limit=25&courseQuotas=&days=&courseRestrictions=&programNew=&profesorName=" +
+            (profesorName != null ? profesorName : "");
 
-        // The RestTemplate is used to make a GET request to the constructed URL, and
-        // the response is expected to be an array of ApiCourse objects.
         return restTemplate.getForObject(url, ApiCourse[].class);
     }
 
@@ -58,9 +54,8 @@ public class CourseService {
      * @return a list of Course objects representing the courses and their sections.
      */
 
-    public List<Course> getDomainCourses(String nameInput) {
-        ApiCourse[] raw = fetchRawSections(nameInput); // Fetches raw course sections from the API based on the provided
-        // name input.
+    public List<Course> getDomainCourses(String nameInput, String profesorName) {
+        ApiCourse[] raw = fetchRawSections(nameInput, profesorName);
 
         // Temporal map
         Map<String, Course> courseMap = new LinkedHashMap<>(); // Initializes a map to hold courses by their code.
@@ -172,7 +167,7 @@ public class CourseService {
      */
 
     public List<Section> findSectionsByCourseCode(String code) {
-        List<Course> courses = getDomainCourses(code); // Fetches the list of courses based on the provided course code.
+        List<Course> courses = getDomainCourses(code, "");
 
         if (courses.isEmpty()) {
             return new ArrayList<>(); // If no courses are found, return an empty list.
