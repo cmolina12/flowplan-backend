@@ -33,9 +33,10 @@ public class CourseController {
 
     @GetMapping
     public ResponseEntity<ApiCourse[]> getCourses(
-        @RequestParam("nameInput") String nameInput
+        @RequestParam("nameInput") String nameInput,
+        @RequestParam(value = "profesorName", required = false, defaultValue = "") String profesorName
     ) {
-        ApiCourse[] courses = courseService.fetchRawSections(nameInput);
+        ApiCourse[] courses = courseService.fetchRawSections(nameInput, profesorName);
         if (courses == null || courses.length == 0) {
             return ResponseEntity.noContent().build();
         }
@@ -51,9 +52,10 @@ public class CourseController {
 
     @GetMapping("/domain")
     public ResponseEntity<List<Course>> getDomainCourses(
-        @RequestParam("nameInput") String nameInput
+        @RequestParam("nameInput") String nameInput,
+        @RequestParam(value = "profesorName", required = false, defaultValue = "") String profesorName
     ) {
-        List<Course> courses = courseService.getDomainCourses(nameInput);
+        List<Course> courses = courseService.getDomainCourses(nameInput, profesorName);
         if (courses.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
