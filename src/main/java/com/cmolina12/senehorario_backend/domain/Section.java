@@ -1,5 +1,6 @@
 package com.cmolina12.senehorario_backend.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 
@@ -32,6 +33,9 @@ public class Section {
     @Getter
     private final int totalSeats; // cantidad total de asientos
 
+    @Getter
+    private final List<String> attrs; // p.ej. ["ECUR", "VIRT"]
+
     public Section(
         String nrc,
         String sectionId,
@@ -41,7 +45,8 @@ public class Section {
         List<Meeting> meetings,
         List<String> professors,
         int availableSeats,
-        int totalSeats
+        int totalSeats,
+        List<String> attrs
     ) {
         this.nrc = nrc;
         this.sectionId = sectionId;
@@ -52,5 +57,6 @@ public class Section {
         this.professors = professors;
         this.availableSeats = availableSeats;
         this.totalSeats = totalSeats;
+        this.attrs = attrs != null ? attrs : new ArrayList<>();
     }
 }

@@ -146,6 +146,7 @@ public class ScheduleService {
 
     /**
      * This method checks if there is a conflict between two sections based on their meeting times.
+     * Sections in non-overlapping academic periods (e.g. 8A vs 8B) never conflict.
      *
      * @param a First section to compare.
      * @param b Second section to compare.
@@ -154,17 +155,29 @@ public class ScheduleService {
 
     private boolean conflict(Section a, Section b){
 
+        if (!ptrmOverlaps(a.getPtrm(), b.getPtrm())) return false;
+
         for (Meeting m1 : a.getMeetings()){
 
             for (Meeting m2 : b.getMeetings()){
 
-                if (m1.getDay() == m2.getDay() && 
-                    m1.getStart().isBefore(m2.getEnd()) && 
+                if (m1.getDay() == m2.getDay() &&
+                    m1.getStart().isBefore(m2.getEnd()) &&
                     m1.getEnd().isAfter(m2.getStart())) {
                     return true; // Conflict found
                 }
             }
         }
         return false; // No conflict found
+    }
+
+    /**
+     * Returns true if two ptrm values represent overlapping academic periods.
+     * "1" (16 weeks) spans the full semester and overlaps everything.
+     * "8A" and "8B" are disjoint half-semester periods.
+     */
+    private boolean ptrmOverlaps(String ptrm1, String ptrm2) {
+        if ("1".equals(ptrm1) || "1".equals(ptrm2)) return true;
+        return ptrm1.equals(ptrm2);
     }
 }

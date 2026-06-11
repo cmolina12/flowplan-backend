@@ -4,6 +4,7 @@ import com.cmolina12.senehorario_backend.domain.Course;
 import com.cmolina12.senehorario_backend.domain.Meeting;
 import com.cmolina12.senehorario_backend.domain.Section;
 import com.cmolina12.senehorario_backend.models.ApiCourse;
+import com.cmolina12.senehorario_backend.models.Attr;
 import com.cmolina12.senehorario_backend.models.Instructor;
 import com.cmolina12.senehorario_backend.models.Schedule;
 import java.time.DayOfWeek;
@@ -21,20 +22,14 @@ import org.springframework.web.client.RestTemplate;
 public class CourseService {
 
     @Autowired
-    private RestTemplate restTemplate; // RestTemplate is used to make HTTP requests to the API to fetch course data.
+    private RestTemplate restTemplate;
 
     @Value("${uniandes.api.base-url}")
     private String apiBaseUrl;
 
     /**
      * Fetches raw course sections from the API based on the provided name input.
-     * This actually works the same way as if you were to use the search bar in the
-     * website.
-     *
-     * @param nameInput the name input to filter course sections.
-     * @return an array of ApiCourse objects representing the course sections.
      */
-
     public ApiCourse[] fetchRawSections(String nameInput, String profesorName) {
         String url =
             apiBaseUrl +
@@ -47,32 +42,35 @@ public class CourseService {
     }
 
     /**
-     * Converts raw course sections fetched from the API into a list of Course
-     * objects, each containing its sections.
-     *
-     * @param nameInput the name input to filter course sections.
-     * @return a list of Course objects representing the courses and their sections.
+     * Fetches all CBU (Ciclo Básico Uniandino) sections from the API.
+     * Uses nameInput=CB (the proven search mechanism) with a high limit.
      */
+    private ApiCourse[] fetchRawCBUSections() {
+        String url =
+            apiBaseUrl +
+            "?term=&ptrm=&prefix=&attr=&nameInput=CB&campus=&attrs=" +
+            "&timeStart=&offset=0&limit=500&courseQuotas=&days=&courseRestrictions=&programNew=&profesorName=";
 
-    public List<Course> getDomainCourses(String nameInput, String profesorName) {
-        ApiCourse[] raw = fetchRawSections(nameInput, profesorName);
+        return restTemplate.getForObject(url, ApiCourse[].class);
+    }
 
-        // Temporal map
-        Map<String, Course> courseMap = new LinkedHashMap<>(); // Initializes a map to hold courses by their code.
+    /**
+     * Maps an array of raw ApiCourse objects into grouped Course domain objects,
+     * including attrs on each Section.
+     */
+    private List<Course> mapToDomain(ApiCourse[] raw) {
+        if (raw == null) return new ArrayList<>();
+
+        Map<String, Course> courseMap = new LinkedHashMap<>();
 
         for (ApiCourse a : raw) {
             String code = a.getClazz() + a.getCourse();
-
-            // Construct the course
 
             Course course = courseMap.computeIfAbsent(code, c ->
                 new Course(c, a.getTitle(), Integer.parseInt(a.getCredits()))
             );
 
-            // Fill in the sections
-
-            List<Meeting> meetings = new ArrayList<>(); // Initializes a list to hold meetings for the course section.
-
+            List<Meeting> meetings = new ArrayList<>();
             for (Schedule s : a.getSchedules()) {
                 for (DayOfWeek day : parseDays(s)) {
                     LocalTime start = parseTime(s.getTime_ini());
@@ -82,50 +80,70 @@ public class CourseService {
                 }
             }
 
-            // Professors
-
             List<String> profs = new ArrayList<>();
-
             for (Instructor ins : a.getInstructors()) {
-                profs.add(reorderProfessorName(ins.getName())); // Adds the reordered professor's name
+                profs.add(reorderProfessorName(ins.getName()));
+            }
+
+            List<String> attrCodes = new ArrayList<>();
+            if (a.getAttr() != null) {
+                for (Attr attr : a.getAttr()) {
+                    if (attr.getCode() != null) attrCodes.add(attr.getCode());
+                }
             }
 
             int availableSeats = parseIntSafe(a.getSeatsavail());
             int totalSeats = parseIntSafe(a.getMaxenrol());
-
-            // Clamp available seats to [0, totalSeats]
             availableSeats = Math.max(0, Math.min(availableSeats, totalSeats));
 
-            // Create a section with the course code, section number, meetings, and
-            // professors.
-
             Section sec = new Section(
-                a.getNrc(), // NRC (Número de Registro de Clase) is used as a unique identifier for the
-                // section.
-                a.getSection(), // Section ID, e.g., "1", "A", "B".
-                a.getTerm(), // Term, e.g., "202519".
-                a.getPtrm(), // PTRM (Periodo de Tiempo), e.g., "1" or "8A".
-                a.getCampus(), // Campus, e.g., "CAMPUS PRINCIPAL".
-                meetings, // List of Meeting objects representing the schedule for the section.
-                profs, // List of professors teaching the section.
+                a.getNrc(),
+                a.getSection(),
+                a.getTerm(),
+                a.getPtrm(),
+                a.getCampus(),
+                meetings,
+                profs,
                 availableSeats,
-                totalSeats
+                totalSeats,
+                attrCodes
             );
 
-            // Associate the section with the course.
-            course.addSection(sec); // Adds the section to the course's list of sections.
+            course.addSection(sec);
         }
 
-        // Return the list of courses.
         return new ArrayList<>(courseMap.values());
     }
 
     /**
-     * Parses a time string in the format "hhmm" and returns a LocalTime object.
-     *
-     * @param hhmm the time string in "hhmm" format.
-     * @return a LocalTime object representing the parsed time.
+     * Converts raw course sections into grouped Course domain objects.
      */
+    public List<Course> getDomainCourses(String nameInput, String profesorName) {
+        ApiCourse[] raw = fetchRawSections(nameInput, profesorName);
+        return mapToDomain(raw);
+    }
+
+    /**
+     * Returns all CBU courses (prefix CB) with sections and attrs included.
+     */
+    public List<Course> getCBUCourses() {
+        ApiCourse[] raw = fetchRawCBUSections();
+        return mapToDomain(raw);
+    }
+
+    /**
+     * Finds sections by course code.
+     */
+    public List<Section> findSectionsByCourseCode(String code) {
+        List<Course> courses = getDomainCourses(code, "");
+
+        if (courses.isEmpty()) {
+            return new ArrayList<>();
+        }
+
+        Course course = courses.get(0);
+        return course.getSections();
+    }
 
     private LocalTime parseTime(String hhmm) {
         if (hhmm == null || hhmm.length() < 4) {
@@ -133,21 +151,13 @@ public class CourseService {
                 "Invalid time format when trying to parse: " + hhmm
             );
         }
-        int hour = Integer.parseInt(hhmm.substring(0, 2)); // Extracts the hour part from the hhmm string.
-        int minute = Integer.parseInt(hhmm.substring(2, 4)); // Extracts the minute part from the hhmm string.
-        return LocalTime.of(hour, minute); // Returns a LocalTime object representing the time.
+        int hour = Integer.parseInt(hhmm.substring(0, 2));
+        int minute = Integer.parseInt(hhmm.substring(2, 4));
+        return LocalTime.of(hour, minute);
     }
 
-    /**
-     * Parses a Schedule object and returns a list of DayOfWeek objects representing
-     * the days of the week.
-     *
-     * @param s the Schedule object to parse.
-     * @return a list of DayOfWeek objects representing the days of the week.
-     */
-
     private List<DayOfWeek> parseDays(Schedule s) {
-        List<DayOfWeek> days = new ArrayList<>(); // Initializes an empty list to hold the days of the week.
+        List<DayOfWeek> days = new ArrayList<>();
 
         if ("L".equalsIgnoreCase(s.getL())) days.add(DayOfWeek.MONDAY);
         if ("M".equalsIgnoreCase(s.getM())) days.add(DayOfWeek.TUESDAY);
@@ -156,56 +166,23 @@ public class CourseService {
         if ("V".equalsIgnoreCase(s.getV())) days.add(DayOfWeek.FRIDAY);
         if ("S".equalsIgnoreCase(s.getS())) days.add(DayOfWeek.SATURDAY);
 
-        return days; // Returns the list of days of the week.
+        return days;
     }
-
-    /**
-     * Finds sections by course code.
-     *
-     * @param code the course code to search for.
-     * @return a list of Section objects associated with the course code.
-     */
-
-    public List<Section> findSectionsByCourseCode(String code) {
-        List<Course> courses = getDomainCourses(code, "");
-
-        if (courses.isEmpty()) {
-            return new ArrayList<>(); // If no courses are found, return an empty list.
-        }
-
-        // We want to return sections from the first course found with the given code.
-        // (The only one that should exist, actually)
-        Course course = courses.get(0); // Gets the first course from the list.
-
-        return course.getSections(); // Returns the list of sections associated with the course.
-    }
-
-    /**
-     * Reorders the professor's name based on the number of parts in the name.
-     *
-     * @param name the professor's name to reorder.
-     * @return the reordered name
-     */
 
     private String reorderProfessorName(String name) {
-        if (name == null || name.trim().isEmpty()) return name; // If the name is null or empty, return it as is.
+        if (name == null || name.trim().isEmpty()) return name;
 
-        String[] parts = name.trim().split("\\s+"); // Splits the name into parts based on whitespace.
+        String[] parts = name.trim().split("\\s+");
         int len = parts.length;
 
         if (len == 2) {
-            return parts[1] + " " + parts[0]; // Original would be "LastName FirstName", we reorder it to "FirstName
-            // LastName".
+            return parts[1] + " " + parts[0];
         } else if (len == 3) {
-            return parts[2] + " " + parts[0] + " " + parts[1]; // Original would be "LastName SecondLastName FirstName",
-            // we reorder it to "FirstName LastName SecondLastName".
+            return parts[2] + " " + parts[0] + " " + parts[1];
         } else if (len == 4) {
-            return parts[2] + " " + parts[3] + " " + parts[0] + " " + parts[1]; // Original would be "LastName
-            // SecondLastName FirstName SecondName",
-            // we reorder it to "FirstName LastName
-            // SecondLastName ThirdLastName".
+            return parts[2] + " " + parts[3] + " " + parts[0] + " " + parts[1];
         } else {
-            return name; // If the name has more than 4 parts, we return it as is.
+            return name;
         }
     }
 
@@ -213,7 +190,7 @@ public class CourseService {
         try {
             return Integer.parseInt(value);
         } catch (NumberFormatException e) {
-            return 0; // or throw if you want strictness
+            return 0;
         }
     }
 }

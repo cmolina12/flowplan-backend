@@ -71,13 +71,25 @@ public class CourseController {
 
     @GetMapping("/{code}/sections")
     public ResponseEntity<List<Section>> getSectionsByCode(@PathVariable("code") String code) {
-  
+
         List<Section> sections = courseService.findSectionsByCourseCode(code);
         if (sections.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(sections);
     }
-    
+
+    /**
+     * Fetches all CBU (Ciclo Básico Uniandino) courses with their sections.
+     * Each section includes an attrs list (e.g. ["ECUR", "VIRT"]) for client-side filtering.
+     */
+    @GetMapping("/cbu")
+    public ResponseEntity<List<Course>> getCBUCourses() {
+        List<Course> courses = courseService.getCBUCourses();
+        if (courses.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(courses);
+    }
 
 }

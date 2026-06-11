@@ -80,7 +80,8 @@ class ScheduleServiceTest {
             List.of(meeting),
             professors,
             5, // available seats
-            30 // total seats
+            30, // total seats
+            List.of() // attrs
         ); // Create a Section object with the provided parameters, including the list of meetings and professors.
     }
 
@@ -104,7 +105,8 @@ class ScheduleServiceTest {
             meetings,
             professors,
             5, // available seats
-            30 // total seats
+            30, // total seats
+            List.of() // attrs
         ); // Create a Section object with the provided parameters, including the list of meetings and professors.
     }
 
